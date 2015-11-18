@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import MoseShipsBukkit.Events.ShipCreateEvent;
 import MoseShipsBukkit.Events.ShipMovingEvent;
 import MoseShipsBukkit.StillShip.Vessel.MovableVessel;
 import MoseShipsBukkit.StillShip.Vessel.Vessel;
@@ -22,9 +23,14 @@ public class ShipsDamage extends JavaPlugin implements Listener{
 	public void onEnable(){
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		    if (!CONFIG.exists()) {
-		      writeToConfig("DamageThreshold", 60);
+		    	ShipsDamage.writeToConfig("DamageThreshold", 60);
 		    }
 	}
+	
+	public void onShipCreation(ShipCreateEvent event)
+	  {
+	    ShipsDamage.writeToVesselDB(event.getVessel(), "FullSize", event.getVessel().getStructure().getAllBlocks().size());
+	  }
 	
 	public void onDisable(){
 		
