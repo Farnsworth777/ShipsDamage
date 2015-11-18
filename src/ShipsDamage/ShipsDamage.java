@@ -21,6 +21,9 @@ public class ShipsDamage extends JavaPlugin implements Listener{
 	
 	public void onEnable(){
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
+		    if (!CONFIG.exists()) {
+		      writeToConfig("DamageThreshold", 60);
+		    }
 	}
 	
 	public void onDisable(){
@@ -32,7 +35,10 @@ public class ShipsDamage extends JavaPlugin implements Listener{
 		MovableVessel vessel = event.getVessel();
 		int currentsize = vessel.getStructure().getAllBlocks().size();
 		int fullsize = Integer.parseInt(getStringFromVesselDB(vessel, "FullSize"));
-		if ((currentsize/fullsize)*100 < Integer.parseInt(getString("totaled"))) {
+		if ((currentsize/fullsize)*100 < Integer.parseInt(getString("DamageThreshold"))) {
+			event.setCancelled(true);
+		}
+		if ((currentsize/fullsize)*100 > 100) {
 			event.setCancelled(true);
 		}
 	}
