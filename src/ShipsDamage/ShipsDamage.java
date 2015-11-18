@@ -30,7 +30,11 @@ public class ShipsDamage extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onShipMove(ShipMovingEvent event){
 		MovableVessel vessel = event.getVessel();
-		int shipssize = vessel.getStructure().getAllBlocks().size();
+		int currentsize = vessel.getStructure().getAllBlocks().size();
+		int fullsize = Integer.parseInt(getStringFromVesselDB(vessel, "FullSize"));
+		if ((currentsize/fullsize)*100 < Integer.parseInt(getString("totaled"))) {
+			event.setCancelled(true);
+		}
 	}
 	public static void writeToVesselDB(Vessel vessel, String location, Object write){
 		File file = vessel.getFile();
@@ -40,11 +44,11 @@ public class ShipsDamage extends JavaPlugin implements Listener{
 			config.save(file);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrawce();
+			e.printStackTrace();
 		}
 	}
 	
-	public static String getStringFromVesselDB(Vessel vessel, String location){
+	public static String getStringFromVesselDB(MovableVessel vessel, String location){
 		File file = vessel.getFile();
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 		String ret = config.getString(location);
