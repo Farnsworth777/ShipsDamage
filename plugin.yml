@@ -1,0 +1,5 @@
+name: ShipsDamage
+version: 0.0.3.6
+main: ShipsDamage.ShipsDamage
+depend:
+  - Ships
